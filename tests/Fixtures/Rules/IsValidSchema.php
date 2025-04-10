@@ -30,7 +30,7 @@ class IsValidSchema extends ValidationRule implements HasTypescript
             'price' => [
                 'value' => 'number',
                 'currency' => 'string | null',
-            ],
-        ];
+            ]
+        ]; 
     }
 }
