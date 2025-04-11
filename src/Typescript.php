@@ -7,20 +7,20 @@ namespace Honed\Form;
 class Typescript
 {
     /**
-     * required, nullable, filled,
-     *
+     * required, nullable, filled, 
+     * 
      * alpha, alpha_dash, alpha_num, array, ascii, boolean, current_password
-     * date, decimal, declined, email, enum, file, hex_color, image, integer,
+     * date, decimal, declined, email, enum, file, hex_color, image, integer, 
      * ip, ipv4, ipv6, json, list, mac_address, numeric, string,
      * timezone, url, ulid, uuid
-     *
-     *
-     * Complex:
+     * 
+     * 
+     * Complex: 
      *     Nested -> need to check the properties -> or enable enforce
      *     confirmed -> needs to match whatever it's sister field type is
      *     exists -> needs to provide a way to inject defaults (unique)
      *     same -> needs to match whatever it's sister field type is
-     *
+     * 
      * Validation insrances:
      *     - enum, exists
      */
@@ -29,7 +29,7 @@ class Typescript
         return match ($rule) {
             'list',
             'array' => '[]',
-
+            
             'alpha',
             'alpha_dash',
             'alpha_num',
@@ -61,4 +61,5 @@ class Typescript
             default => 'unknown',
         };
     }
+
 }
