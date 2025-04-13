@@ -8,7 +8,7 @@ interface ToForm
 {
     /**
      * Get the default values to be used for the form.
-     * 
+     *
      * @return array<string, mixed>
      */
     public function getFormDefaults();
