@@ -11,7 +11,7 @@ interface HasTypescript
 {
     /**
      * Get the type to be used in the typescript definition.
-     *
+     * 
      * @return string|array<string,mixed>
      */
     public function typescriptType();
