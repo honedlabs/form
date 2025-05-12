@@ -8,33 +8,33 @@ use Honed\Form\Form;
 
 /**
  * @template TModel of \Illuminate\Database\Eloquent\Model
- * 
+ *
  * @phpstan-require-extends \Illuminate\Foundation\Http\FormRequest
- */ 
+ */
 trait HasForm
 {
     /**
      * The underlying form object.
-     * 
+     *
      * @var \Honed\Form\Form|null
      */
     protected $form;
 
     /**
      * Convert the form request to a form object.
-     * 
+     *
      * @return \Honed\Form\Form
      */
     public static function asForm()
     {
-        $request = new self();
+        $request = new self;
 
         return $request->formInstance();
     }
 
     /**
      * Get an instance of the form object.
-     * 
+     *
      * @return \Honed\Form\Form
      */
     public function formInstance()
@@ -44,18 +44,15 @@ trait HasForm
 
     /**
      * Set the configuration to use for the form via a callback.
-     * 
-     * @param \Honed\Form\Form $form
+     *
+     * @param  \Honed\Form\Form  $form
      * @return void
      */
-    public function form($form)
-    {
-        return;
-    }
+    public function form($form) {}
 
     /**
      * Get the validated data after it has been processed by the form.
-     * 
+     *
      * @return array<string, mixed>
      */
     public function getFormData()
@@ -69,8 +66,8 @@ trait HasForm
 
     /**
      * Use the form configuration to store a new model record.
-     * 
-     * @param class-string<TModel> $modelClass
+     *
+     * @param  class-string<TModel>  $modelClass
      * @return TModel
      */
     public function store($modelClass)
@@ -82,8 +79,8 @@ trait HasForm
 
     /**
      * Use the form configuration to update an existing model record.
-     * 
-     * @param TModel $model
+     *
+     * @param  TModel  $model
      * @return int
      */
     public function update($model)
@@ -94,8 +91,8 @@ trait HasForm
 
     /**
      * Use the form configuration to delete a model record.
-     * 
-     * @param TModel $model
+     *
+     * @param  TModel  $model
      * @return mixed
      */
     public function destroy($model)
