@@ -4,99 +4,64 @@ declare(strict_types=1);
 
 namespace Honed\Form\Concerns;
 
+use Honed\Form\Attributes\UseForm;
 use Honed\Form\Form;
+use ReflectionClass;
 
 /**
- * @template TModel of \Illuminate\Database\Eloquent\Model
+ * @template TForm of \Honed\Form\Form = \Honed\Form\Form
  *
- * @phpstan-require-extends \Illuminate\Foundation\Http\FormRequest
+ * @property-read string $formClass The form class for the model.
  */
 trait HasForm
 {
     /**
-     * The underlying form object.
+     * Get the form instance for the model.
      *
-     * @var \Honed\Form\Form|null
+     * @param  class-string<Form>|null  $form
+     * @return TForm
      */
-    protected $form;
-
-    /**
-     * Convert the form request to a form object.
-     *
-     * @return \Honed\Form\Form
-     */
-    public static function asForm()
+    public static function form(?string $form = null): Form
     {
-        $request = new self;
-
-        return $request->formInstance();
+        return static::newForm() ?? Form::formForModel(static::class);
     }
 
     /**
-     * Get an instance of the form object.
+     * Create a new form instance for the model.
      *
-     * @return \Honed\Form\Form
+     * @return TForm|null
      */
-    public function formInstance()
+    protected static function newForm(): ?Form
     {
-        return $this->form ??= Form::make($this->validationRules());
+        if (isset(static::$formClass)) {
+            return static::$formClass::make();
+        }
+
+        if ($form = static::getUseFormAttribute()) {
+            return $form::make();
+        }
+
+        return null;
     }
 
     /**
-     * Set the configuration to use for the form via a callback.
+     * Get the form from the Form class attribute.
      *
-     * @param  \Honed\Form\Form  $form
-     * @return void
+     * @return TForm|null
      */
-    public function form($form) {}
-
-    /**
-     * Get the validated data after it has been processed by the form.
-     *
-     * @return array<string, mixed>
-     */
-    public function getFormData()
+    protected static function getUseFormAttribute(): ?Form
     {
-        // if ($this->fails()) {
+        $attributes = (new ReflectionClass(static::class))
+            ->getAttributes(UseForm::class);
 
-        // }
-        return $this->formInstance()
-            ->transform($this->safe());
-    }
+        if ($attributes !== []) {
+            $useForm = $attributes[0]->newInstance();
 
-    /**
-     * Use the form configuration to store a new model record.
-     *
-     * @param  class-string<TModel>  $modelClass
-     * @return TModel
-     */
-    public function store($modelClass)
-    {
+            $form = $useForm->formClass::make();
 
-        return $modelClass::query()
-            ->create($this->getFormData());
-    }
+            return $form;
+        }
 
-    /**
-     * Use the form configuration to update an existing model record.
-     *
-     * @param  TModel  $model
-     * @return int
-     */
-    public function update($model)
-    {
-        return $model->query()
-            ->update($this->getFormData());
-    }
-
-    /**
-     * Use the form configuration to delete a model record.
-     *
-     * @param  TModel  $model
-     * @return mixed
-     */
-    public function destroy($model)
-    {
-        return $model->query()->delete();
+        return null;
     }
 }
