@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Honed\Form\Components;
 
-class Textarea extends Input
+use BackedEnum;
+use Honed\Form\Enums\FormComponent;
+
+class Textarea extends TextField
 {
     /**
      * The identifier to use for evaluation.
@@ -16,9 +19,8 @@ class Textarea extends Input
     /**
      * The name of the component.
      */
-    public function component(): string
+    public function component(): string|BackedEnum
     {
-        /** @var string */
-        return config('form.components.textarea', 'Textarea.vue');
+        return FormComponent::Textarea;
     }
 }

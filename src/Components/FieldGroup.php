@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Honed\Form\Components;
 
-use Honed\Form\Abstracts\Grouping;
+use BackedEnum;
+use Honed\Form\Enums\FormComponent;
 
 class FieldGroup extends Grouping
 {
@@ -18,9 +19,8 @@ class FieldGroup extends Grouping
     /**
      * The name of the component.
      */
-    public function component(): string
+    public function component(): string|BackedEnum
     {
-        /** @var string */
-        return config('form.components.fieldgroup', 'FieldGroup.vue');
+        return FormComponent::FieldGroup;
     }
 }

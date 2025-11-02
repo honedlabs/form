@@ -14,10 +14,7 @@ class FormServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public function register(): void
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/form.php', 'form');
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap services.
@@ -41,11 +38,7 @@ class FormServiceProvider extends ServiceProvider
     protected function offerPublishing(): void
     {
         $this->publishes([
-            __DIR__.'/../config/form.php' => config_path('form.php'),
-        ], 'form-config');
-
-        $this->publishes([
             __DIR__.'/../stubs' => base_path('stubs'),
-        ], 'form-stubs');
+        ], 'honed-form-stubs');
     }
 }

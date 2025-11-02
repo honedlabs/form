@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Honed\Form\Components;
 
-use Honed\Form\Abstracts\Field;
+use BackedEnum;
+use Honed\Form\Enums\FormComponent;
 
-class Input extends Field
+class Input extends TextField
 {
     /**
      * The identifier to use for evaluation.
@@ -18,17 +19,8 @@ class Input extends Field
     /**
      * The name of the component.
      */
-    public function component(): string
+    public function component(): string|BackedEnum
     {
-        /** @var string */
-        return config('form.components.input', 'Input.vue');
-    }
-
-    /**
-     * Get the placeholder for when the given value is null.
-     */
-    public function empty(): mixed
-    {
-        return '';
+        return FormComponent::Input;
     }
 }

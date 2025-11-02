@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Honed\Form\Components;
 
-use Honed\Form\Abstracts\Field;
+use BackedEnum;
+use Honed\Form\Enums\FormComponent;
 
 class Radio extends Field
 {
+    // use HasOptions;
+
     /**
      * The identifier to use for evaluation.
      *
@@ -18,9 +21,16 @@ class Radio extends Field
     /**
      * The name of the component.
      */
-    public function component(): string
+    public function component(): string|BackedEnum
     {
-        /** @var string */
-        return config('form.components.radio', 'Radio.vue');
+        return FormComponent::Radio;
     }
+
+    // protected function representation(): array
+    // {
+    //     return [
+    //         'options' => $this->getOptions(),
+    //         ...parent::representation(),
+    //     ];
+    // }
 }
