@@ -8,7 +8,6 @@ use BackedEnum;
 use Carbon\Carbon;
 use Honed\Form\Concerns\HasDateFormat;
 use Honed\Form\Enums\FormComponent;
-use Honed\Form\Enums\Granularity;
 
 class DateField extends Field
 {
@@ -19,7 +18,7 @@ class DateField extends Field
      *
      * @var string
      */
-    protected $evaluationIdentifier = 'dateField';
+    protected $evaluationIdentifier = 'date';
 
     /**
      * The name of the component.
@@ -49,9 +48,9 @@ class DateField extends Field
      *
      * @return $this
      */
-    public function granularity(string|BackedEnum $value): static
+    public function granularity(string|BackedEnum|null $value): static
     {
-        return $this->attribute('granularity', is_string($value) ? $value : (string) $value->value);
+        return $this->attribute('granularity', $value instanceof BackedEnum ? (string) $value->value : $value);
     }
 
     /**
@@ -59,8 +58,18 @@ class DateField extends Field
      *
      * @return $this
      */
-    public function locale(string|BackedEnum $value): static
+    public function locale(string|BackedEnum|null $value): static
     {
-        return $this->attribute('locale', is_string($value) ? $value : (string) $value->value);
+        return $this->attribute('locale', $value instanceof BackedEnum ? (string) $value->value : $value);
+    }
+
+    /**
+     * Set the locale of the date to the application locale.
+     *
+     * @return $this
+     */
+    public function appLocale(): static
+    {
+        return $this->locale(app()->getLocale());
     }
 }

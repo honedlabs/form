@@ -6,6 +6,7 @@ use App\Models\Product;
 use Honed\Form\Components\Legend;
 use Honed\Form\Enums\FormComponent;
 use Honed\Form\Form;
+use Honed\Form\Support\Trans;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,12 +29,21 @@ it('has array representation', function () {
         ]);
 });
 
+it('assigns properties', function () {
+    expect($this->component)
+        ->assign(['label' => 'assign'])->toBe($this->component)
+        ->getLabel()->toBe('assign')
+        ->assign(['label' => new Trans('assign')])->toBe($this->component)
+        ->getLabel()->toBe(__('assign'));
+});
+
 describe('evaluation', function () {
     beforeEach(function () {
         $this->product = Product::factory()->create();
 
         $this->form = Form::make()->record($this->product);
     });
+
     it('has named dependencies', function ($closure, $class) {
         expect($this->component)
             ->form($this->form)->toBe($this->component)
@@ -48,6 +58,9 @@ describe('evaluation', function () {
         function () {
             return [fn ($row) => $row, Product::class];
         },
+        function () {
+            return [fn ($form) => $form, Form::class];
+        },
 
     ]);
 
@@ -56,12 +69,17 @@ describe('evaluation', function () {
             ->form($this->form)->toBe($this->component)
             ->evaluate($closure)->toBeInstanceOf($class);
     })->with([
-        fn () => [fn (Form $arg) => $arg, Form::class],
+        function () {
+            return [fn (Form $arg) => $arg, Form::class];
+        },
         function () {
             return [fn (Product $m) => $m, Product::class];
         },
         function () {
             return [fn (Model $r) => $r, Product::class];
+        },
+        function () {
+            return [fn (Form $f) => $f, Form::class];
         },
     ]);
 

@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }};
+
+use Honed\Form\Components\Component;
+use Spatie\LaravelData\Support\DataClass;
+use Spatie\LaravelData\Support\DataProperty;
+use Honed\Form\Contracts\DataAdapter;
+
+class {{ class }} implements DataAdapter
+{ 
+    /**
+     * Get the form component for the data property.
+     */
+    public function getComponent(DataProperty $property, DataClass $dataClass): ?Component
+    {
+        return null;
+    }
+}

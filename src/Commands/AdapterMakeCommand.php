@@ -11,36 +11,36 @@ use Symfony\Component\Console\Input\InputOption;
 use function strtolower;
 use function trim;
 
-#[AsCommand(name: 'make:form-component')]
-class FormComponentMakeCommand extends GeneratorCommand
+#[AsCommand(name: 'honed:adapter')]
+class AdapterMakeCommand extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'make:form-component';
+    protected $name = 'honed:adapter';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $description = 'Create a new form component class';
+    protected $description = 'Create a new form adapter class';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Form Component';
+    protected $type = 'Form Adapter';
 
     /**
      * Get the stub file for the generator.
      */
     protected function getStub(): string
     {
-        return $this->resolveStubPath('/stubs/honed.form-component.stub');
+        return $this->resolveStubPath('/stubs/honed.adapter.stub');
     }
 
     /**
@@ -62,7 +62,7 @@ class FormComponentMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace.'\Forms\Components';
+        return $rootNamespace.'\Forms\Adapters';
     }
 
     /**
@@ -73,7 +73,7 @@ class FormComponentMakeCommand extends GeneratorCommand
     protected function getOptions(): array
     {
         return [
-            ['force', null, InputOption::VALUE_NONE, 'Create the class even if the form component already exists'],
+            ['force', null, InputOption::VALUE_NONE, 'Create the class even if the form adapter already exists'],
         ];
     }
 
@@ -87,7 +87,7 @@ class FormComponentMakeCommand extends GeneratorCommand
         return [
             'name' => [
                 'What should the '.strtolower($this->type).' be named?',
-                'E.g. Combobox',
+                'E.g. LookupAdapter',
             ],
         ];
     }

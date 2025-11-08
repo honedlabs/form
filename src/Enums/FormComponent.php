@@ -8,11 +8,12 @@ enum FormComponent: string
 {
     case Checkbox = 'checkbox';
     case Date = 'date';
-    case FieldGroup = 'field-group';
+    case FieldGroup = 'fieldgroup';
     case Fieldset = 'fieldset';
     case Input = 'input';
     case Legend = 'legend';
-    case Password = 'password';
+    case Lookup = 'lookup';
+    case Number = 'number';
     case Radio = 'radio';
     case Select = 'select';
     case Text = 'text';

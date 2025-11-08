@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Honed\Form;
 
-use Honed\Form\Commands\FormComponentMakeCommand;
+use Honed\Form\Commands\AdapterMakeCommand;
+use Honed\Form\Commands\ComponentMakeCommand;
 use Honed\Form\Commands\FormListCommand;
 use Honed\Form\Commands\FormMakeCommand;
 use Illuminate\Support\ServiceProvider;
@@ -14,7 +15,10 @@ class FormServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/honed-form.php', 'honed-form');
+    }
 
     /**
      * Bootstrap services.
@@ -26,7 +30,8 @@ class FormServiceProvider extends ServiceProvider
 
             if (! $this->app->environment('production')) {
                 $this->commands([
-                    FormComponentMakeCommand::class,
+                    AdapterMakeCommand::class,
+                    ComponentMakeCommand::class,
                     FormListCommand::class,
                     FormMakeCommand::class,
                 ]);
@@ -39,6 +44,10 @@ class FormServiceProvider extends ServiceProvider
      */
     protected function offerPublishing(): void
     {
+        $this->publishes([
+            __DIR__.'/../config/honed-form.php' => config_path('honed-form.php'),
+        ], 'honed-form-config');
+
         $this->publishes([
             __DIR__.'/../stubs' => base_path('stubs'),
         ], 'honed-form-stubs');

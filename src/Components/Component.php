@@ -10,6 +10,8 @@ use Honed\Core\Concerns\HasAttributes;
 use Honed\Core\Contracts\NullsAsUndefined;
 use Honed\Core\Primitive;
 use Honed\Form\Concerns\BelongsToForm;
+use Honed\Form\Form;
+use Honed\Form\Support\FunctionalArgument;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -55,9 +57,9 @@ abstract class Component extends Primitive implements NullsAsUndefined
      *
      * @return $this
      */
-    public function as(?string $value): static
+    public function as(string|BackedEnum|null $value): static
     {
-        $this->component = $value;
+        $this->component = $value instanceof BackedEnum ? (string) $value->value : $value;
 
         return $this;
     }
@@ -74,6 +76,23 @@ abstract class Component extends Primitive implements NullsAsUndefined
         $component = $this->component();
 
         return is_string($component) ? $component : (string) $component->value;
+    }
+
+    /**
+     * Assign properties to the component.
+     *
+     * @param  array<string, mixed>  $attributes
+     * @return $this
+     *
+     * @internal
+     */
+    public function assign(array $attributes): static
+    {
+        foreach ($attributes as $key => $value) {
+            $this->{$key} = $value instanceof FunctionalArgument ? $value->getValue() : $value;
+        }
+
+        return $this;
     }
 
     /**
@@ -110,6 +129,7 @@ abstract class Component extends Primitive implements NullsAsUndefined
     {
         return match ($parameterName) {
             'model', 'record', 'row' => [$this->getRecord()],
+            'form' => [$this->getForm()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }
@@ -130,6 +150,7 @@ abstract class Component extends Primitive implements NullsAsUndefined
 
         return match ($parameterType) {
             Model::class, $record::class => [$record],
+            Form::class => [$this->getForm()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
         };
     }
