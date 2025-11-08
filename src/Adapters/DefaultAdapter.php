@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Honed\Form\Adapters;
 
+use Closure;
 use Honed\Form\Components\Component;
 use Honed\Form\Components\Input;
-use Honed\Form\Contracts\DataAdapter;
-use Spatie\LaravelData\Support\DataClass;
 use Spatie\LaravelData\Support\DataProperty;
 
 /**
@@ -18,7 +17,7 @@ class DefaultAdapter extends Adapter
     /**
      * Get the class string of the component to be generated.
      *
-     * @return class-string<\Honed\Form\Components\Input>
+     * @return class-string<Input>
      */
     public function field(): string
     {
@@ -35,7 +34,8 @@ class DefaultAdapter extends Adapter
 
     /**
      * Determine if the request rules are a valid candidate for conversion.
-     * @param list<string|\Closure|\Illuminate\Validation\Rule> $rules
+     *
+     * @param  list<string|Closure|\Illuminate\Validation\Rule>  $rules
      */
     public function shouldConvertRules(string $key, array $rules): bool
     {

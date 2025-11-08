@@ -18,13 +18,6 @@ abstract class Generator implements GeneratorContract
     use Conditionable;
 
     /**
-     * Create a new generator instance.
-     */
-    public function __construct(
-        protected Repository $config
-    ) {}
-
-    /**
      * The local adapters for this generator.
      *
      * @var list<class-string<DataAdapter>>
@@ -46,9 +39,21 @@ abstract class Generator implements GeneratorContract
     protected $form;
 
     /**
+     * Create a new generator instance.
+     */
+    public function __construct(
+        protected Repository $config
+    ) {}
+
+    /**
+     * Generate a form.
+     */
+    abstract public function generate(mixed ...$payloads): Form;
+
+    /**
      * Create a new form builder instance.
-     * 
-     * @param class-string<T> $className
+     *
+     * @param  class-string<T>  $className
      */
     public static function make(string $className): static
     {
@@ -67,11 +72,6 @@ abstract class Generator implements GeneratorContract
 
         return $this;
     }
-
-    /**
-     * Generate a form.
-     */
-    abstract public function generate(mixed ...$payloads): Form;
 
     /**
      * Set the form instance to be used.
