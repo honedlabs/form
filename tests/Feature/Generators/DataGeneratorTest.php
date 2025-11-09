@@ -76,6 +76,11 @@ it('generates form without payload', function () {
                         'component' => FormComponent::Lookup->value,
                         'name' => 'user',
                         'label' => 'User',
+                        'defaultValue' => [
+                            'name' => null,
+                            'email' => null,
+                        ],
+                        'options' => [],
                         'url' => route('users.index'),
                         'method' => mb_strtolower(Request::METHOD_GET),
                     ],
@@ -83,6 +88,7 @@ it('generates form without payload', function () {
                         'component' => FormComponent::Input->value,
                         'name' => 'name',
                         'label' => 'Name',
+                        'required' => true,
                     ],
                     [
                         'component' => FormComponent::Textarea->value,
@@ -93,17 +99,20 @@ it('generates form without payload', function () {
                         'component' => FormComponent::Number->value,
                         'name' => 'price',
                         'label' => 'Price',
+                        'required' => true,
                     ],
                     [
                         'component' => FormComponent::Checkbox->value,
                         'name' => 'best_seller',
                         'label' => 'Best seller',
+                        'required' => true,
                     ],
                     [
                         'component' => FormComponent::Select->value,
                         'name' => 'status',
                         'label' => 'Status',
-                        'value' => Status::Available->value,
+                        'defaultValue' => Status::Available,
+                        'required' => true,
                         'options' => [
                             [
                                 'value' => Status::Available->value,
@@ -123,6 +132,8 @@ it('generates form without payload', function () {
                         'component' => FormComponent::Input->value,
                         'name' => 'users',
                         'label' => 'Users',
+                        'defaultValue' => [],
+                        'required' => true,
                     ],
                 ],
             ])
