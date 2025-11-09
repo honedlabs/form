@@ -7,6 +7,7 @@ namespace Honed\Form\Adapters;
 use Closure;
 use Honed\Form\Components\Checkbox;
 use Honed\Form\Components\Component;
+use Spatie\LaravelData\Support\DataClass;
 use Spatie\LaravelData\Support\DataProperty;
 
 /**
@@ -27,7 +28,7 @@ class BooleanAdapter extends Adapter
     /**
      * Determine if the property is a valid candidate for conversion.
      */
-    public function shouldConvertProperty(DataProperty $property): bool
+    public function shouldConvertProperty(DataProperty $property, DataClass $dataClass): bool
     {
         return $property->type->type->acceptsType('bool');
     }

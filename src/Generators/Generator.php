@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Honed\Form\Generators;
 
-use Honed\Form\Contracts\DataAdapter;
 use Honed\Form\Contracts\Generator as GeneratorContract;
 use Honed\Form\Form;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\Traits\Conditionable;
 
 /**
- * @template T
+ * @template T of \Spatie\LaravelData\Data|\Illuminate\Http\Request
+ *
+ * @implements GeneratorContract<T>
  */
 abstract class Generator implements GeneratorContract
 {
@@ -20,9 +21,9 @@ abstract class Generator implements GeneratorContract
     /**
      * The local adapters for this generator.
      *
-     * @var list<class-string<DataAdapter>>
+     * @var list<class-string<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>>
      */
-    protected $adapters = [];
+    protected array $adapters = [];
 
     /**
      * The data class to generate a form for.
@@ -46,12 +47,7 @@ abstract class Generator implements GeneratorContract
     ) {}
 
     /**
-     * Generate a form.
-     */
-    abstract public function generate(mixed ...$payloads): Form;
-
-    /**
-     * Create a new form builder instance.
+     * Create a new generator instance.
      *
      * @param  class-string<T>  $className
      */
@@ -104,11 +100,11 @@ abstract class Generator implements GeneratorContract
     /**
      * Set local adapters to be used, appends to the current list.
      *
-     * @param  class-string<DataAdapter>|list<class-string<DataAdapter>>  $adapters
+     * @param  class-string<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>|list<class-string<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>>  $adapters
      */
     public function adapters(string|array $adapters): static
     {
-        /** @var list<class-string<DataAdapter>> */
+        /** @var list<class-string<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>> */
         $adapters = is_array($adapters) ? $adapters : func_get_args();
 
         $this->adapters = array_merge($this->adapters, $adapters);
@@ -119,7 +115,7 @@ abstract class Generator implements GeneratorContract
     /**
      * Get the adapters to be used.
      *
-     * @return list<DataAdapter>
+     * @return list<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>
      */
     public function getAdapters(): array
     {
@@ -134,11 +130,11 @@ abstract class Generator implements GeneratorContract
     /**
      * Get the global adapters.
      *
-     * @return list<class-string<DataAdapter>>
+     * @return list<class-string<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>>
      */
-    protected function getGlobalAdapters()
+    protected function getGlobalAdapters(): array
     {
-        /** @var list<class-string<DataAdapter>> */
+        /** @var list<class-string<(T is \Spatie\LaravelData\Data ? \Honed\Form\Contracts\DataAdapter : \Honed\Form\Contracts\RulesAdapter)>> */
         return $this->config->get('honed-form.adapters', []);
     }
 }

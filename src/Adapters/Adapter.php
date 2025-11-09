@@ -28,7 +28,7 @@ abstract class Adapter implements AdapterContract
     /**
      * Determine if the property is a valid candidate for conversion.
      */
-    abstract public function shouldConvertProperty(DataProperty $property): bool;
+    abstract public function shouldConvertProperty(DataProperty $property, DataClass $dataClass): bool;
 
     /**
      * Determine if the request rules are a valid candidate for conversion.
@@ -97,6 +97,6 @@ abstract class Adapter implements AdapterContract
      */
     public function newComponent(string $name, ?string $label = null): Component
     {
-        return $this->field($name)::make($name, $label);
+        return $this->field()::make($name, $label);
     }
 }

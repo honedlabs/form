@@ -12,7 +12,7 @@ use Honed\Form\Contracts\Adapter;
 use Spatie\LaravelData\Support\DataClass;
 use Spatie\LaravelData\Support\DataProperty;
 
-class CustomAdapter extends Adapter
+class CustomAdapter implements Adapter
 {
     use Adaptable;
 
@@ -25,7 +25,13 @@ class CustomAdapter extends Adapter
             return null;
         }
 
-        return null;
+        $component = resolve($attribute->getComponent());
+
+        return $component->assign([
+            'name' => $this->getName($property),
+            'label' => $this->getLabel($property),
+            ...$attribute->getArguments(),
+        ]);
     }
 
     /**

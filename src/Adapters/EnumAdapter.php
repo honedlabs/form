@@ -8,9 +8,12 @@ use BackedEnum;
 use Closure;
 use Honed\Form\Components\Component;
 use Honed\Form\Components\Select;
+use Spatie\LaravelData\Support\DataClass;
 use Spatie\LaravelData\Support\DataProperty;
-use UnitEnum;
 
+/**
+ * @extends Adapter<\Honed\Form\Components\Select>
+ */
 class EnumAdapter extends Adapter
 {
     /**
@@ -26,10 +29,9 @@ class EnumAdapter extends Adapter
     /**
      * Determine if the property is a valid candidate for conversion.
      */
-    public function shouldConvertProperty(DataProperty $property): bool
+    public function shouldConvertProperty(DataProperty $property, DataClass $dataClass): bool
     {
-        return (bool) $property->type->type->findAcceptedTypeForBaseType(BackedEnum::class)
-            || (bool) $property->type->type->findAcceptedTypeForBaseType(UnitEnum::class);
+        return (bool) $property->type->type->findAcceptedTypeForBaseType(BackedEnum::class);
     }
 
     /**
@@ -40,5 +42,22 @@ class EnumAdapter extends Adapter
     public function shouldConvertRules(string $key, array $rules): bool
     {
         return in_array('enum', $rules);
+    }
+
+    /**
+     * Create a new component instance from the data property.
+     *
+     * @return Select
+     */
+    public function convertProperty(DataProperty $property, DataClass $dataClass): Component
+    {
+        /** @var \Spatie\LaravelData\Support\Types\NamedType $type */
+        $type = $property->type->type;
+
+        /** @var class-string<BackedEnum> $enum */
+        $enum = $type->name;
+
+        return parent::convertProperty($property, $dataClass)
+            ->options($enum);
     }
 }

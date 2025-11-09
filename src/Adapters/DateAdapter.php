@@ -7,6 +7,7 @@ namespace Honed\Form\Adapters;
 use Closure;
 use Honed\Form\Components\DateField;
 use Spatie\LaravelData\Attributes\Validation\Date;
+use Spatie\LaravelData\Support\DataClass;
 use Spatie\LaravelData\Support\DataProperty;
 
 /**
@@ -27,7 +28,7 @@ class DateAdapter extends Adapter
     /**
      * Determine if the property is a valid candidate for conversion.
      */
-    public function shouldConvertProperty(DataProperty $property): bool
+    public function shouldConvertProperty(DataProperty $property, DataClass $dataClass): bool
     {
         return $property->attributes->has(Date::class);
     }

@@ -26,6 +26,7 @@ class Component
         public string $component,
         mixed ...$arguments
     ) {
+        // @phpstan-ignore-next-line assign.propertyType
         $this->arguments = $arguments;
     }
 

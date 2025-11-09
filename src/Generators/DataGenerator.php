@@ -29,6 +29,8 @@ class DataGenerator extends Generator
 
     /**
      * Generate a form.
+     *
+     * @throws CannotResolveComponent
      */
     public function generate(mixed ...$payloads): Form
     {
@@ -43,14 +45,19 @@ class DataGenerator extends Generator
                 continue;
             }
 
+            $component = null;
+
             foreach ($adapters as $adapter) {
-                if ($component = $adapter->getComponent($property, $dataClass)) {
-                    $form->append($component);
+                if ($component = $adapter->getPropertyComponent($property, $dataClass)) {
                     break;
                 }
             }
 
-            CannotResolveComponent::throw($property->name);
+            if ($component === null) {
+                CannotResolveComponent::throw($property->name);
+            }
+
+            $form->append($component);
         }
 
         $form->record($this->getData($payloads));
