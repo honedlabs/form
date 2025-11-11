@@ -6,7 +6,6 @@ namespace Honed\Form\Adapters;
 
 use Closure;
 use Honed\Form\Components\Component;
-use Honed\Form\Concerns\Adaptable;
 use Honed\Form\Contracts\Adapter as AdapterContract;
 use Spatie\LaravelData\Support\DataClass;
 use Spatie\LaravelData\Support\DataProperty;
@@ -14,10 +13,8 @@ use Spatie\LaravelData\Support\DataProperty;
 /**
  * @template T of \Honed\Form\Components\Field
  */
-abstract class Adapter implements AdapterContract
+abstract class Adapter extends FromPropertyAdapter implements AdapterContract
 {
-    use Adaptable;
-
     /**
      * Get the class string of the component to be generated.
      *
@@ -73,11 +70,11 @@ abstract class Adapter implements AdapterContract
      */
     public function convertProperty(DataProperty $property, DataClass $dataClass): Component
     {
-        $name = $this->getName($property);
-        $label = $this->getLabel($property);
+        $name = $this->getNameFromProperty($property);
+        $label = $this->getLabelFromProperty($property);
 
         return $this->newComponent($name, $label)
-            ->assign($this->assignFromProperty($property));
+            ->assign($this->rejectNulls($this->assignFromProperty($property)));
     }
 
     /**
@@ -89,7 +86,7 @@ abstract class Adapter implements AdapterContract
     public function convertRules(string $key, array $rules): Component
     {
         return $this->newComponent($key)
-            ->assign($this->assignFromRules($key, $rules));
+            ->assign($this->rejectNulls($this->assignFromRules($key, $rules)));
     }
 
     /**
@@ -100,19 +97,6 @@ abstract class Adapter implements AdapterContract
     public function newComponent(string $name, ?string $label = null): Component
     {
         return $this->field()::make($name, $label);
-    }
-
-    /**
-     * Define the attributes which should be assigned to the component from the data property.
-     *
-     * @return array<string, mixed>
-     */
-    protected function assignFromProperty(DataProperty $property): array
-    {
-        return [
-            'required' => $this->isRequired($property),
-            'hint' => $this->getHint($property),
-        ];
     }
 
     /**

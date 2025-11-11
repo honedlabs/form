@@ -38,3 +38,15 @@ it('has file type', function () {
             'type' => 'file',
         ]);
 });
+
+it('has array representation', function () {
+    expect($this->component)
+        ->placeholder('Enter a name')->toBe($this->component)
+        ->toArray()->toEqualCanonicalizing([
+            'component' => FormComponent::Input->value,
+            'name' => 'name',
+            'label' => 'Name',
+            // defaultValue is removed as it is `null`
+            'placeholder' => 'Enter a name',
+        ]);
+});

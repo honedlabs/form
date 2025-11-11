@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Honed\Core\Contracts\HasLabel;
+use Honed\Form\Concerns\CanBeSearched;
 use Honed\Form\Concerns\HasForm;
+use Honed\Form\Contracts\CanBeSearched as CanBeSearchedContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Product extends Model
+class Product extends Model implements CanBeSearchedContract, HasLabel
 {
+    use CanBeSearched;
+
     /**
      * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ProductFactory>
      */
@@ -54,5 +59,13 @@ class Product extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, ProductUser::class);
+    }
+
+    /**
+     * Get the label for the product.
+     */
+    public function getLabel(): string
+    {
+        return $this->name;
     }
 }
