@@ -89,10 +89,23 @@ abstract class Component extends Primitive implements NullsAsUndefined
     public function assign(array $attributes): static
     {
         foreach ($attributes as $key => $value) {
-            $this->{$key} = $value instanceof FunctionalArgument ? $value->getValue() : $value;
+            $this->{$key}($value instanceof FunctionalArgument
+                ? $value->getValue()
+                : $value
+            );
         }
 
         return $this;
+    }
+
+    /**
+     * Set the class name of the component.
+     *
+     * @return $this
+     */
+    public function className(?string $value): static
+    {
+        return $this->attribute('class', $value);
     }
 
     /**
