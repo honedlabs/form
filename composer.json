@@ -25,7 +25,7 @@
         "illuminate/support": "^11.0||^12.0"
     },
     "require-dev": {
-        "honed/data": "^0.6.0",
+        "honed/data": "^0.7.1",
         "larastan/larastan": "^3.2.0",
         "laravel/pint": "^1.18",
         "nunomaduro/collision": "^8.1",
