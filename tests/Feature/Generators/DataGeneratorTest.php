@@ -100,7 +100,7 @@ it('generates form without payload', function () {
                         'label' => 'Description',
                         'attributes' => [
                             'max' => 65535,
-                        ]
+                        ],
                     ],
                     [
                         'component' => FormComponent::Number->value,
