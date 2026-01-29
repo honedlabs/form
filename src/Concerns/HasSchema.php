@@ -68,8 +68,8 @@ trait HasSchema
 
     /**
      * Set the initial values of the component.
-     * 
-     * @param array<string, mixed>|Arrayable<string, mixed> $data
+     *
+     * @param  array<string, mixed>|Arrayable<string, mixed>  $data
      * @return $this
      */
     public function withInitialValues(array|Arrayable $data): static
@@ -93,7 +93,8 @@ trait HasSchema
         foreach ($this->getSchema() as $component) {
             if ($this->equals($key, $component)) {
                 return $component;
-            } else if ($component instanceof Grouping) {
+            }
+            if ($component instanceof Grouping) {
                 if ($child = $component->getField($key)) {
                     return $child;
                 }
@@ -123,8 +124,8 @@ trait HasSchema
      */
     protected function equals(string $key, string|Field $component): bool
     {
-        return is_string($component) 
-            ? $component === $key 
+        return is_string($component)
+            ? $component === $key
             : $component->getName() === $key;
     }
 }
