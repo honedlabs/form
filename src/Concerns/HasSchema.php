@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Honed\Form\Concerns;
 
 use Honed\Form\Components\Component;
+use Honed\Form\Components\Field;
+use Honed\Form\Components\Grouping;
 use Honed\Form\Form;
+use Illuminate\Contracts\Support\Arrayable;
 
 trait HasSchema
 {
@@ -61,6 +64,43 @@ trait HasSchema
     public function getSchema(): array
     {
         return $this->schema;
+    }
+
+    /**
+     * Set the initial values of the component.
+     *
+     * @param  array<string, mixed>|Arrayable<string, mixed>  $data
+     * @return $this
+     */
+    public function withInitialValues(array|Arrayable $data): static
+    {
+        if ($data instanceof Arrayable) {
+            $data = $data->toArray();
+        }
+
+        foreach ($data as $key => $value) {
+            $this->getField($key)?->defaultValue($value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Find and return a field component by the given key.
+     */
+    public function getField(string $key): ?Field
+    {
+        foreach ($this->getSchema() as $component) {
+            if ($component instanceof Field && $component->getName() === $key) {
+                return $component;
+            }
+
+            if ($component instanceof Grouping && ($child = $component->getField($key))) {
+                return $child;
+            }
+        }
+
+        return null;
     }
 
     /**
