@@ -91,13 +91,12 @@ trait HasSchema
     public function getField(string $key): ?Field
     {
         foreach ($this->getSchema() as $component) {
-            if ($this->equals($key, $component)) {
+            if ($component instanceof Field && $component->getName() === $key) {
                 return $component;
             }
-            if ($component instanceof Grouping) {
-                if ($child = $component->getField($key)) {
-                    return $child;
-                }
+
+            if ($component instanceof Grouping && ($child = $component->getField($key))) {
+                return $child;
             }
         }
 
@@ -117,15 +116,5 @@ trait HasSchema
                 array_filter($this->getSchema(), fn (Component $component) => $component->isAllowed())
             )
         );
-    }
-
-    /**
-     * Determine if the component is equal to the given key.
-     */
-    protected function equals(string $key, string|Field $component): bool
-    {
-        return is_string($component)
-            ? $component === $key
-            : $component->getName() === $key;
     }
 }

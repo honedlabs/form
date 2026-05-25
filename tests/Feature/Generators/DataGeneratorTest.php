@@ -151,4 +151,4 @@ it('generates form without payload', function () {
                 ],
             ])
         );
-})->only();
+});
